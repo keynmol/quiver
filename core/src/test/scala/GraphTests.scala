@@ -138,7 +138,7 @@ object GraphTests extends Properties("Graph") {
     }
 
   property("The roots of a graph have no incoming edges from other nodes") = forAll {
-    (ns: List[LNode[N,Int]], es: List[LEdge[N,Int]], i: Int) =>
+    (ns: List[LNode[N,Int]], es: List[LEdge[N,Int]]) =>
       val g = safeMkGraph(ns, es)
       val vs = ns.map(_.vertex).toSet
       val roots = vs.filterNot(n => es.find { e =>
@@ -148,7 +148,7 @@ object GraphTests extends Properties("Graph") {
     }
 
   property("The leaves of a graph have no outgoing edges to other nodes") = forAll {
-    (ns: List[LNode[N,Int]], es: List[LEdge[N,Int]], i: Int) =>
+    (ns: List[LNode[N,Int]], es: List[LEdge[N,Int]]) =>
       val g = safeMkGraph(ns, es)
       val vs = ns.map(_.vertex).toSet
       val leaves = vs.filterNot(n => es.find { e =>
@@ -163,7 +163,7 @@ object GraphTests extends Properties("Graph") {
       val from = tpg._2.vertex
       val to = tpg._3.vertex
       val sPath = graph.lesp(from, to)
-      val cPath = graph.cheapestPath[Int](from, to, (f: LNode[N,Int], l: Int, t: LNode[N,Int]) => 1)
+      val cPath = graph.cheapestPath[Int](from, to, (_: LNode[N,Int], _: Int, _: LNode[N,Int]) => 1)
       s"Paths different: cheapest = $cPath, shortest = $sPath" |: sPath === cPath
     }
 
@@ -173,8 +173,18 @@ object GraphTests extends Properties("Graph") {
   // TODO Clean these up, probably into a GraphCogen class. Keep the questionable ones hidden.
   implicit def cogenMap[K: Cogen: Ordering, V: Cogen]: Cogen[Map[K, V]] =
     Cogen.it(_.toVector.sortBy(_._1).iterator)
+
+  implicit def cogenGrContext[V: Cogen: Ordering, A:Cogen, B:Cogen: Ordering]: Cogen[GrContext[V, A, B]] =
+    Cogen[(Map[V, Set[B]], A, Map[V, Set[B]])].contramap(c => (c.inAdj, c.label, c.outAdj))
+
   implicit def cogenContext[V: Cogen: Ordering, A: Cogen, B: Cogen: Ordering]: Cogen[Context[V, A, B]] =
     Cogen[(V, GrContext[V, A, B])].contramap(c => c.vertex -> c.toGrContext)
+
+  implicit def cogenGDecomp[V: Cogen: Ordering, A:Cogen, B:Cogen: Ordering]: Cogen[GDecomp[V, A, B]] =
+    Cogen[(Context[V, A, B], Graph[V, A, B])].contramap(d => (d.ctx, d.rest))
+
+  implicit def cogenGraph[V: Cogen: Ordering, A:Cogen, B:Cogen: Ordering]: Cogen[Graph[V, A, B]] =
+    Cogen[Map[V, GrContext[V, A, B]]].contramap(_.rep)
 
   include(ComonadTests[({type λ[α] = GDecomp[N,α,Int]})#λ].comonad[Int, Int, Int].all)
 
