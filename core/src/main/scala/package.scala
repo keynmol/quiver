@@ -18,6 +18,9 @@
 import cats.{Monoid, Order}
 import cats.free.Cofree
 import cats.implicits._
+import scala.collection.compat.immutable.LazyList
+import scala.collection.compat._
+
 
 /**
  * @groupname creation Graph Construction
@@ -59,13 +62,13 @@ package object quiver {
    * Inward directed tree as a list of paths
    * @group types
    */
-  type RTree[N] = Stream[Path[N]]
+  type RTree[N] = LazyList[Path[N]]
 
   /**
    * Inward directed tree as a list of labeled paths
    * @group types
    */
-  type LRTree[N,A] = Stream[LPath[N,A]]
+  type LRTree[N,A] = LazyList[LPath[N,A]]
 
   /**
    * Unlabeled path through a graph
@@ -141,7 +144,7 @@ package object quiver {
   def cycle[N](vs: Seq[N]): Graph[N,Unit,Unit] =
     mkGraph(vs.map(LNode(_, ())),
       if (vs.isEmpty) Seq()
-      else (vs, vs.tail ++ Seq(vs.head)).zipped.map(LEdge[N,Unit](_, _, ())))
+      else vs.lazyZip(vs.tail ++ Seq(vs.head)).map(LEdge[N,Unit](_, _, ())))
 
   /**
    * Create a directed star graph of degree `n`
@@ -248,7 +251,7 @@ package object quiver {
   /**
    * Find all paths in a labeled search tree that start with the given node
    */
-  def getLPaths[N,A](v: N, t: LRTree[N,A]): Stream[LPath[N,A]] =
+  def getLPaths[N,A](v: N, t: LRTree[N,A]): LazyList[LPath[N,A]] =
     t.filter(_._1 == v).map(reverseLPath)
 
   /**
@@ -279,11 +282,11 @@ package object quiver {
   }
 
 
-  type Tree[A] = Cofree[Stream, A]
+  type Tree[A] = Cofree[LazyList, A]
 
-  def flattenTree[A](tree: Tree[A]): Stream[A] = {
-    def go(tree: Tree[A], xs: Stream[A]): Stream[A] =
-      Stream.cons(tree.head, tree.tail.value.foldRight(xs)(go(_, _)))
-    go(tree, Stream.Empty)
+  def flattenTree[A](tree: Tree[A]): LazyList[A] = {
+    def go(tree: Tree[A], xs: LazyList[A]): LazyList[A] =
+      LazyList.cons(tree.head, tree.tail.value.foldRight(xs)(go(_, _)))
+    go(tree, LazyList.empty)
   }
 }

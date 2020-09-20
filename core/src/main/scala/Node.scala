@@ -19,10 +19,11 @@ package quiver
 
 import cats.Eval
 import cats.free.Cofree
+import scala.collection.compat.immutable.LazyList
 
 object Node {
-  def apply[A](root: A, forest: => Stream[Tree[A]]): Tree[A] =
-    Cofree[Stream, A](root, Eval.later(forest))
+  def apply[A](root: A, forest: => LazyList[Tree[A]]): Tree[A] =
+    Cofree[LazyList, A](root, Eval.later(forest))
 
-  def unapply[A](t: Tree[A]): Option[(A, Stream[Tree[A]])] = Some((t.head, t.tail.value))
+  def unapply[A](t: Tree[A]): Option[(A, LazyList[Tree[A]])] = Some((t.head, t.tail.value))
 }

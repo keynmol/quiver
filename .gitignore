@@ -35,3 +35,5 @@ bin
 .ivy2
 gpg.sbt
 
+.bloop
+.metals
