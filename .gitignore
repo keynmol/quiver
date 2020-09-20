@@ -37,3 +37,5 @@ gpg.sbt
 
 .bloop
 .metals
+
+project/metals.sbt

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title:  "Home"
 section: "home"
 ---
@@ -12,10 +12,10 @@ section: "home"
 
 ## Getting Started
 
-To begin using *Quiver*, add the following dependency in your SBT build (check for the latest release by [looking on maven central](http://search.maven.org/#search%7Cga%7C1%7Cio.verizon.quiver)):
+To begin using *Quiver*, add the following dependency in your SBT build (check for the latest release by [looking on maven central](http://search.maven.org/#search%7Cga%7C1%7Cio.getnelson.quiver)):
 
 ```scala
-libraryDependencies += "io.verizon.quiver" %% "core" % "x.x.x-scalaz-7.y"
+libraryDependencies += "io.getnelson.quiver" %% "core" % "@VERSION@"
 ```
 
 Then import the following package in your source file:
