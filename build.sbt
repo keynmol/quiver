@@ -26,6 +26,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .settings(commonSettings)
   .settings(silenceCompat)
+  .settings(coverageEnabled := scalaBinaryVersion.value != "2.13")
   .jsSettings(coverageEnabled := false)
 
 val commonSettings = Seq(
@@ -54,6 +55,7 @@ lazy val codecs = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += "org.scodec" %%% "scodec-core" % ScodecVersion
   )
   .settings(commonSettings)
+  .settings(coverageEnabled := scalaBinaryVersion.value != "2.13")
   .jsSettings(coverageEnabled := false)
 
 lazy val docsMappingsAPIDir = settingKey[String](
