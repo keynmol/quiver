@@ -26,6 +26,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .settings(commonSettings)
   .settings(silenceCompat)
+  .jsSettings(coverageEnabled := false)
 
 val commonSettings = Seq(
   organization in Global := "io.getnelson.quiver",
@@ -53,6 +54,7 @@ lazy val codecs = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += "org.scodec" %%% "scodec-core" % ScodecVersion
   )
   .settings(commonSettings)
+  .jsSettings(coverageEnabled := false)
 
 lazy val docsMappingsAPIDir = settingKey[String](
   "Name of subdirectory in site target directory for api docs"
