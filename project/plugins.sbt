@@ -1,14 +1,16 @@
-
 resolvers += Resolver.url(
   "tpolecat-sbt-plugin-releases",
-    url("https://dl.bintray.com/content/tpolecat/sbt-plugin-releases"))(
-        Resolver.ivyStylePatterns)
+  url("https://dl.bintray.com/content/tpolecat/sbt-plugin-releases")
+)(Resolver.ivyStylePatterns)
 
-addSbtPlugin("io.verizon.build" % "sbt-rig" % "5.0.39")
-
-// docs
-addSbtPlugin("com.typesafe.sbt"          % "sbt-site"     % "1.4.0")
-addSbtPlugin("com.typesafe.sbt"          % "sbt-ghpages"  % "0.6.3")
-addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.1.10")
-addSbtPlugin("org.tpolecat"              % "tut-plugin"   % "0.6.13")
-addSbtPlugin("com.eed3si9n"              % "sbt-unidoc"   % "0.4.3")
+addSbtPlugin("io.verizon.build"          % "sbt-rig"                  % "5.0.39"   excludeAll(
+    ExclusionRule(organization = "org.scoverage")
+))
+addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat"             % "0.1.10")
+addSbtPlugin("com.eed3si9n"              % "sbt-unidoc"               % "0.4.3")
+addSbtPlugin("org.scalameta"             % "sbt-mdoc"                 % "2.2.9")
+addSbtPlugin("org.portable-scala"        % "sbt-scalajs-crossproject" % "1.0.0")
+addSbtPlugin("org.scala-js"              % "sbt-scalajs"              % "1.2.0")
+addSbtPlugin("org.scalameta"             % "sbt-scalafmt"             % "2.4.0")
+addSbtPlugin("com.47deg"                 % "sbt-microsites"           % "1.1.5")
+addSbtPlugin("org.scoverage"             % "sbt-scoverage"            % "1.6.0")

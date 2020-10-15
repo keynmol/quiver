@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title:  "Home"
 section: "home"
 ---
@@ -12,15 +12,15 @@ section: "home"
 
 ## Getting Started
 
-To begin using *Quiver*, add the following dependency in your SBT build (check for the latest release by [looking on maven central](http://search.maven.org/#search%7Cga%7C1%7Cio.verizon.quiver)):
+To begin using *Quiver*, add the following dependency in your SBT build (check for the latest release by [looking on maven central](http://search.maven.org/#search%7Cga%7C1%7Cio.getnelson.quiver)):
 
 ```scala
-libraryDependencies += "io.verizon.quiver" %% "core" % "x.x.x-scalaz-7.y"
+libraryDependencies += "io.getnelson.quiver" %% "core" % "@VERSION@"
 ```
 
 Then import the following package in your source file:
 
-```tut
+```scala mdoc:to-string
 import quiver._
 ```
 
@@ -36,43 +36,33 @@ With these two functions, we can construct any graph. Let's look at a few very s
 
 The empty graph:
 
-```tut
-import quiver._
-
+```scala mdoc:to-string
 val nil = empty[Int,Char,Unit]
 ```
 
 A graph with one node identified as `1`, labeled `a`:
 
-```tut
-import quiver._
-
+```scala mdoc:to-string
 val a = nil & Context(Vector(), 1, 'a', Vector())
 ```
 
 A graph with one node having an edge to itself:
 
-```tut
-import quiver._
-
+```scala mdoc:to-string
 val loop = nil & Context(Vector(), 1, 'a', Vector(() -> 1))
 ```
 
-The `toString` method is defined to print the adjacency list representation. This means that a graph is shown as a list of labeled nodes, each followed by the list of labeled outgoing edges. 
+The `toString` method is defined to print the adjacency list representation. This means that a graph is shown as a list of labeled nodes, each followed by the list of labeled outgoing edges.
 
 Here is a graph with two nodes, `a` and `b`, and one edge `a -> b`:
 
-```tut
-import quiver._
-
+```scala mdoc:to-string
 val e = a & Context(Vector(() -> 1), 2, 'b', Vector())
 ```
 
 A graph with a cycle of two nodes `a <-> b`:
 
-```tut
-import quiver._
-
+```scala mdoc:to-string
 val ab = a & Context(Vector(() -> 1), 2, 'b', Vector(() -> 1))
 ```
 
@@ -100,7 +90,7 @@ The fundamental operation for decomposing a graph is given by the method `decomp
 
 Let's look at some examples:
 
-```tut
+```scala mdoc:to-string
 a decomp 1
 loop decomp 1
 ab decomp 1
