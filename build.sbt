@@ -11,7 +11,7 @@ val CatsVersion         = "2.2.0"
 val SilencerVersion     = "1.7.1"
 val ScalacheckShapeless = "1.2.5"
 val CollectionsCompat   = "2.2.0"
-val ScodecVersion = "1.11.7"
+val ScodecVersion       = "1.11.7"
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
